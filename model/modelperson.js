@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-// definition dun schemas de donne pour ppersone 
+
 
 const personSchema = new mongoose.Schema({
     name: {
@@ -10,9 +10,9 @@ const personSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    favoriteFoods: [{
+    favoriteFoods: {
         type: String
-    }]
+    }
 })
 
 module.exports = mongoose.model('Person', personSchema)

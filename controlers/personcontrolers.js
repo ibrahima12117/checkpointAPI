@@ -1,60 +1,78 @@
-const person = require('../model/modelperson')
+// Import the Person model
+const Person = require('../model/modelperson');
 
-// funtion de creqtion dune personne dqns la base de donne 
-
-exports.createPerson = async (req, res) => {
+// Function to create a person in the database
+module.exports.createPerson = async (req, res) => {
     try {
-        const newPerson = new person({
+        // Check if the required properties are present in req.body
+        if (!req.body.name || !req.body.age || !req.body.favoriteFoods) {
+            return res.status(400).json({ message: "Les données de la requête sont incomplètes" });
+        }
+
+        // Create a new instance of the Person model
+        const person = new Person({
             name: req.body.name,
             age: req.body.age,
             favoriteFoods: req.body.favoriteFoods
         });
 
-        const person = await newPerson.save()
+        // Save the person instance
+        const personpost = await person.save();
 
-        res.status(201).json(person)
+        // Respond with the created person object
+        res.status(201).json(personpost);
     } catch (error) {
-        res.status(400).json({ message: error.message })
+        // Handle errors
+        res.status(400).json({ message: error.message });
     }
-}
 
+    console.log(req.body);
+};
 
-// function deletePerson with deleteone 
-
+// Function to delete a person using deleteOne
 exports.deletePerson = async (req, res) => {
     try {
-        const person = await Person.findByIdAndDelete(req.params.id)
+        console.log(`Attempting to delete person with ID: ${req.params.id}`);
+        const persondel = await Person.findByIdAndDelete(req.params.id);
 
-        if (!person) return res.status(404).json({ message: 'Person not found' })
+        if (!persondel) {
+            console.log('Person not found');
+            return res.status(404).json({ message: 'Person not found' });
+        }
 
-        res.json(person)
+    
+        console.log('Person deleted:', persondel);
+        res.json(persondel);
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        console.error('Error deleting person:', error.message);
+        res.status(500).json({ message: error.message });
     }
-}      
-// function  findPerson with find
+    console.log(this.deletePerson)
+};
 
+
+// Function to find a person by ID
 exports.getPerson = async (req, res) => {
     try {
-        const person = await Person.findById(req.params.id)
+        const personget = await Person.findById(req.params.id);
 
-        if (!person) return res.status(404).json({ message: 'Person not found' })
+        if (!personget) return res.status(404).json({ message: 'Person not found' });
 
-        res.json(person)
+        res.json(personget);
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
-}
-// function savePerson with save
+};
 
+// Function to update a person using save
 exports.updatePerson = async (req, res) => {
     try {
-        const person = await Person.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        const personup = await Person.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
-        if (!person) return res.status(404).json({ message: 'Person not found' })
+        if (!personup) return res.status(404).json({ message: 'Person not found' });
 
-        res.json(person)
+        res.json(personup);
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
-}
+};

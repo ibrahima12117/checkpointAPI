@@ -3,13 +3,13 @@ const express =require('express');
  const port=5000;
   require('dotenv').config()
 require('./config/db')
-const person =require('./route/routeperson')
+const person = require('./route/routeperson')
  
  app.get('/', (req,res) =>{ 
 res.send('hello world')
 })
  
- 
+ app.use('/api',person)
  
  
  

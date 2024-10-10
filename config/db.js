@@ -9,4 +9,5 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(() =>
         console.log('Database connection error!')
     );
- module.exports= mongoose
+
+module.exports= mongoose ;
